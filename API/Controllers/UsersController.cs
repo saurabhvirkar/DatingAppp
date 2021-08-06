@@ -6,6 +6,7 @@ using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Controllers
 {
     [ApiController]
@@ -29,5 +30,7 @@ namespace API.Controllers
         {
             return await _context.Users.FindAsync(id);
         }
+        
+        
     }
 }
