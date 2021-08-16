@@ -4,7 +4,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 
-
 @NgModule({
   declarations: [],
   imports: [

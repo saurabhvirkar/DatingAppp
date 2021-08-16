@@ -8,6 +8,9 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AccountService {
+  static getToken() {
+    throw new Error('Method not implemented.');
+  }
   baseUrl='https://localhost:5001/api/';
   private currentUserSource = new ReplaySubject<User>(1);
   currentUser$=this.currentUserSource.asObservable();
