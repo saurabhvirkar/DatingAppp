@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
        setHeaders: {
         'Content-Type' : 'application/json; charset=utf-8',
         'Accept'       : 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJib2IiLCJuYmYiOjE2MjkxMDc0MjgsImV4cCI6MTYyOTcxMjIyOCwiaWF0IjoxNjI5MTA3NDI4fQ.MDU80w7khFTKEj0eC58DArgu69td1_GKNFftsMpsnfAe2Do2EwCaDfoHl7_Uj47CbmsL6Q-30hyBfwY4t_5E6Q',
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsaXNhIiwibmJmIjoxNjI5NzE1MDUzLCJleHAiOjE2MzAzMTk4NTMsImlhdCI6MTYyOTcxNTA1M30.KtA9_xVI_rfWJYOxq6PhvcXHdM_rtw1ts0OnK-ntkwpJq3xPoG3e2-zhzTLBVxRCA6dpwySIOYj1_A_f0G9A7w',
        },
      });
     return next.handle(request).pipe(
