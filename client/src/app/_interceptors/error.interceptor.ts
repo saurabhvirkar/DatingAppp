@@ -10,20 +10,22 @@ import { Observable, throwError } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
+import { User } from '../_models/user';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  
 
   constructor(private router:Router, private toastr: ToastrService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    request = request.clone({
-       setHeaders: {
-        'Content-Type' : 'application/json; charset=utf-8',
-        'Accept'       : 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsaXNhIiwibmJmIjoxNjI5NzE1MDUzLCJleHAiOjE2MzAzMTk4NTMsImlhdCI6MTYyOTcxNTA1M30.KtA9_xVI_rfWJYOxq6PhvcXHdM_rtw1ts0OnK-ntkwpJq3xPoG3e2-zhzTLBVxRCA6dpwySIOYj1_A_f0G9A7w',
-       },
-     });
+     request = request.clone({
+        setHeaders: {
+         'Content-Type' : 'application/json; charset=utf-8',
+         'Accept'       : 'application/json',
+          'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsaXNhIiwibmJmIjoxNjI5ODc0NjAwLCJleHAiOjE2MzA0Nzk0MDAsImlhdCI6MTYyOTg3NDYwMH0.niv5KstZjDQxpHbzYRv_XieVgQ6hWY-gP5cGX5HTOsHXhGYbO1qm2LTf03o-GRiih2mdHuip28_iwzW9KbuRfw',
+        },
+      })
     return next.handle(request).pipe(
       
       catchError(error =>{
