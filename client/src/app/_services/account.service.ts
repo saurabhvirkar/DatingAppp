@@ -9,8 +9,8 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AccountService {
-  // static getToken() {
-  //   throw new Error('Method not implemented.');
+  //static getToken() {
+    // throw new Error('Method not implemented.');
   // }
   baseUrl=environment.apiUrl;
   private currentUserSource = new ReplaySubject<User>(1);
@@ -19,7 +19,7 @@ export class AccountService {
   constructor(private http: HttpClient) { }
 
   login(model:any){   
-      return this.http.post<User>(this.baseUrl +'account/login' ,model).pipe(
+      return this.http.post<User>(this.baseUrl +'account/login',model).pipe(
         map((response : User) => {
           const user = response;
           if(user)
@@ -53,4 +53,20 @@ export class AccountService {
     this.currentUserSource.next(undefined);
   }
 
+
+  
+
+  public getToken(): any
+  {
+    localStorage.getItem('token') ;
+  }
+  public isAuthenticated(model:any) {
+    // get the token
+    const token = this.getToken();
+    // return a boolean reflecting 
+    // whether or not the token is expired
+     return this.currentUserSource.next();
+  }
 }
+
+

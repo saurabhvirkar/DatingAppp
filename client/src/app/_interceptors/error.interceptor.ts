@@ -11,21 +11,33 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { User } from '../_models/user';
+import { AccountService } from '../_services/account.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   
 
-  constructor(private router:Router, private toastr: ToastrService) {}
+  constructor(private router:Router, private toastr: ToastrService, public accountService:AccountService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-     request = request.clone({
-        setHeaders: {
-         'Content-Type' : 'application/json; charset=utf-8',
-         'Accept'       : 'application/json',
-          'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsaXNhIiwibmJmIjoxNjI5ODc0NjAwLCJleHAiOjE2MzA0Nzk0MDAsImlhdCI6MTYyOTg3NDYwMH0.niv5KstZjDQxpHbzYRv_XieVgQ6hWY-gP5cGX5HTOsHXhGYbO1qm2LTf03o-GRiih2mdHuip28_iwzW9KbuRfw',
-        },
+       request = request.clone({
+         setHeaders: {
+          'Content-Type' : 'application/json; charset=utf-8',
+           'Accept'       : 'application/json',
+            'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMyIsInVuaXF1ZV9uYW1lIjoiYnJ1Y2UiLCJuYmYiOjE2MzA1NzY1NjAsImV4cCI6MTYzMTE4MTM2MCwiaWF0IjoxNjMwNTc2NTYwfQ.2CTBxgYdwKhMpNkgWhTP0GGSsyViD4QIn5juszGEKw-djwPFD83elpqLUQcN3J4ZBsuw_vfqVyBCZ3UA_qMcZg',
+          },
       })
+    
+    //   let currentUser: User;
+    //   this.accountService.currentUser$.pipe().subscribe(user => currentUser ==user);
+    // if(currentUser!)
+    // {
+    //   request = request.clone({
+    //     setHeaders:{
+    //       Authorization:`Bearer ${this.accountService.getToken}`
+    //     }
+    //   })
+    // }
     return next.handle(request).pipe(
       
       catchError(error =>{
@@ -64,9 +76,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               console.log(error);
               break;
           }
-       
-        }
-        
+        } 
         return throwError(error);
       })
     );
