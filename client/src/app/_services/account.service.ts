@@ -17,13 +17,16 @@ export class AccountService {
   currentUser$=this.currentUserSource.asObservable();
  
   constructor(private http: HttpClient) { }
+  
 
-  login(model:any){   
+  login(model:any){
+       
       return this.http.post<User>(this.baseUrl +'account/login',model).pipe(
         map((response : User) => {
           const user = response;
           if(user)
           {
+            debugger
             this.setCurrentUser(user);
           }
         })
@@ -53,20 +56,36 @@ export class AccountService {
     this.currentUserSource.next(undefined);
   }
 
+  getCurrentUser()
+  { 
+    if(localStorage.getItem('user')!= null && localStorage.getItem('user')!= undefined)
+    {
+      return JSON.parse(localStorage.getItem('user') || '{}'); 
+    }
+    else 
+    {
+      return null;
+    }
+  }
+
 
   
 
-  public getToken(): any
-  {
-    localStorage.getItem('token') ;
-  }
-  public isAuthenticated(model:any) {
-    // get the token
-    const token = this.getToken();
-    // return a boolean reflecting 
-    // whether or not the token is expired
-     return this.currentUserSource.next();
-  }
-}
+//   public getToken(): string | null{
+//     return localStorage.getItem('token');
+//   }
+//   public isAuthenticated(): boolean {
+//     // get the token
+//     const token = this.getToken();
+//     // return a boolean reflecting 
+//     // whether or not the token is expired
+//     return tokenNotExpired(null, token);
+//   }
+// }
 
+
+// function tokenNotExpired(arg0: null, token: string | null): boolean {
+//   throw new Error('Function not implemented.');
+
+}
 
