@@ -27,6 +27,7 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DateInputComponent } from './_forms/date-input/date-input.component';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 //import { AuthInterceptor } from './_interceptors/auth.interceptor';
 
 
@@ -48,6 +49,7 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     PhotoEditorComponent,
     TextInputComponent,
     DateInputComponent,
+    MemberMessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,7 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     { provide: HTTP_INTERCEPTORS,useClass: ErrorInterceptor, multi:true },
     //{ provide : HTTP_INTERCEPTORS,useClass: AuthInterceptor, multi   : true,},
     { provide: HTTP_INTERCEPTORS,useClass: JwtInterceptor, multi:true },
-    //{ provide: HTTP_INTERCEPTORS,useClass: LoadingInterceptor, multi:true },
+    { provide: HTTP_INTERCEPTORS,useClass: LoadingInterceptor, multi:true},
   ],
   bootstrap: [AppComponent]
 })
