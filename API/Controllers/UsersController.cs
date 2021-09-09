@@ -33,8 +33,8 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
+      
         [HttpGet]
-
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
             var user = await _userRepository.GetUserbyUsernameAsync(User.GetUsername());
@@ -55,6 +55,7 @@ namespace API.Controllers
             throw new NotImplementedException();
         }
 
+        
         [HttpGet("{username}", Name ="GetUser")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {

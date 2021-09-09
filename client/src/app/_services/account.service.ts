@@ -45,6 +45,9 @@ export class AccountService {
   
 
   setCurrentUser(user:User){
+    user.roles =[];
+    const roles = this.getDecodedToken(user.token).role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
     localStorage.setItem('user',JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -67,24 +70,8 @@ export class AccountService {
     }
   }
 
-
-  
-
-//   public getToken(): string | null{
-//     return localStorage.getItem('token');
-//   }
-//   public isAuthenticated(): boolean {
-//     // get the token
-//     const token = this.getToken();
-//     // return a boolean reflecting 
-//     // whether or not the token is expired
-//     return tokenNotExpired(null, token);
-//   }
-// }
-
-
-// function tokenNotExpired(arg0: null, token: string | null): boolean {
-//   throw new Error('Function not implemented.');
-
+  getDecodedToken(token:string){
+    return JSON.parse(atob(token.split('.')[1]));
+  }
 }
 
