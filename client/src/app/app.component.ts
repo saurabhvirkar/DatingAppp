@@ -10,25 +10,23 @@ import { PresenceService } from './_services/presence.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{ 
+export class AppComponent implements OnInit {
   users: any;
-  title= "The Dating App"
-  
-  
-  constructor( private accountService: AccountService , private presence: PresenceService){}
+  title = "The Dating App"
 
-  ngOnInit() 
-  {
+
+  constructor(private accountService: AccountService, private presence: PresenceService) { }
+
+  ngOnInit() {
     this.setCurrentUser();
   }
 
-  setCurrentUser()
-  {
-    const user:User = JSON.parse(localStorage.getItem('user') || '{}');;
-    if (user){
+  setCurrentUser() {
+    const user: User = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (user) {
       this.accountService.setCurrentUser(user);
-      this.presence.createHubConnection(user);
+      //this.presence.createHubConnection(user);
     }
-  
   }
 }

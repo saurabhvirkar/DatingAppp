@@ -9,11 +9,11 @@ import { MembersService } from '../_services/members.service';
   styleUrls: ['./lists.component.css']
 })
 export class ListsComponent implements OnInit {
-  members!: Partial<Member[]> |any;
-  predicate ='liked';
-  pageNumber=1;
-  pageSize=5; 
-  pagination! :Pagination;
+  members!: Partial<Member[]> | any;
+  predicate = 'liked';
+  pageNumber = 1;
+  pageSize = 5;
+  pagination!: Pagination;
 
   constructor(private memberService: MembersService) { }
 
@@ -21,16 +21,15 @@ export class ListsComponent implements OnInit {
     this.laodLikes();
   }
 
-  laodLikes(){
-    this.memberService.getLikes(this.predicate, this.pageNumber,this.pageSize).subscribe(response =>{
+  laodLikes() {
+    this.memberService.getLikes(this.predicate, this.pageNumber, this.pageSize).subscribe(response => {
       this.members = response.result;
       this.pagination = response.pagination;
     })
   }
 
-  pageChanged(event: any){
-    this.pageNumber= event.page;
+  pageChanged(event: any) {
+    this.pageNumber = event.page;
     this.laodLikes();
   }
-
 }
