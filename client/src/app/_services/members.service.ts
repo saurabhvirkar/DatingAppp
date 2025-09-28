@@ -24,8 +24,10 @@ export class MembersService {
 
   constructor(private http: HttpClient, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
-      this.user = user;
-      this.userParams = new UserParams(user);
+      if (user) {
+        this.user = user;
+        this.userParams = new UserParams(user);
+      }
     })
   }
 
@@ -38,7 +40,9 @@ export class MembersService {
   }
 
   resetUserParams() {
-    this.userParams = new UserParams(this.user);
+    if (this.user) {
+      this.userParams = new UserParams(this.user);
+    }
     return this.userParams;
   }
 

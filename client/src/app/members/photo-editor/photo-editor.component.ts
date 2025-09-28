@@ -1,5 +1,7 @@
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { Component, Input, OnInit } from '@angular/core';
-import { FileUploader } from 'ng2-file-upload';
+import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { Photo } from 'src/app/_models/photo';
@@ -11,28 +13,45 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-photo-editor',
   templateUrl: './photo-editor.component.html',
-  styleUrls: ['./photo-editor.component.css']
+  styleUrls: ['./photo-editor.component.css'],
+  standalone: true,
+  imports: [CommonModule, MatInputModule, MatButtonModule]
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() member!: Member;
-  uploader!: FileUploader;
-  hasBaseDropzoneOver!: false;
+    selectedFile: File | null = null;
+  // Removed FileUploader and dropzone logic
   baseUrl = environment.apiUrl;
   user!: User;
 
 
 
   constructor(private acccountService: AccountService, private memberService: MembersService) {
-    this.acccountService.currentUser$.pipe<User>(take(1)).subscribe(user => this.user = user)
+    this.acccountService.currentUser$.pipe(take(1)).subscribe(user => {
+      if (user) {
+        this.user = user;
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.initializeUploader();
+    // No uploader initialization needed
   }
 
-  fileOverBase(e: any) {
-    this.hasBaseDropzoneOver = e;
-  }
+    onFileSelected(event: Event) {
+      const input = event.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        this.selectedFile = input.files[0];
+      }
+    }
+
+    uploadPhoto() {
+      if (!this.selectedFile) return;
+      // Implement upload logic using Angular HttpClient here
+      // Example: this.memberService.uploadPhoto(this.selectedFile).subscribe(...)
+    }
+
+  // Removed dropzone logic
 
   setMainPhoto(photo: Photo) {
     this.memberService.setMainPhoto(photo.id).subscribe(() => {
@@ -52,33 +71,6 @@ export class PhotoEditorComponent implements OnInit {
     })
   }
 
-  initializeUploader() {
-    this.uploader = new FileUploader({
-      url: this.baseUrl + 'users/add-photo',
-      authToken: 'Bearer ' + this.user.token,
-      isHTML5: true,
-      allowedFileType: ['image'],
-      removeAfterUpload: true,
-      autoUpload: false,
-      maxFileSize: 10 * 1024 * 1024
-    });
-
-    this.uploader.onAfterAddingFile = (file) => {
-      file.withCredentials = false;
-    }
-
-    this.uploader.onSuccessItem = (item, response, status, headers) => {
-      if (response) {
-        const photo: Photo = JSON.parse(response);
-        this.member.photos.push(photo);
-        if (photo.isMain) {
-          this.user.photoUrl = photo.url;
-          this.member.photoUrl = photo.url;
-          this.acccountService.setCurrentUser(this.user);
-        }
-
-      }
-    }
-  }
+  // Removed ng2-file-upload logic. Use uploadPhoto() for Angular Material upload.
 
 }

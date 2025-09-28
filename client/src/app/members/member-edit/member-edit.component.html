@@ -1,66 +1,25 @@
-<div class="row" *ngIf="member">
-    <div class="col-4">
-        <h1>Your Profile</h1>
-    </div>
-    <div class="col-8">
-        <div class="alert alert-info" *ngIf="editForm.dirty">
-            <strong>Infornmation: </strong> You have made changes, any unsave changes will lost
-        </div>
-    </div>
 
-    <div class="col-4">
-        <div class="card">
-            <img src="{{member.photoUrl ||'./assets/user.png'}}" alt="{{member.knownAs}}" 
-            class="card-img-top img-thumbnail">
-            <div class="card-body">
-                <div>
-                    <strong>Location:</strong>
-                    <p>{{member.city}},{{member.country}}</p>
-                </div>
-               
-                <div>
-                    <strong>Age:</strong>
-                    <p>{{member.age}}</p>
-                </div>
-                <div>
-                    <strong>Last Actve:</strong>
-                    <p>{{member.lastActive | timeago}}</p>
-                </div>
-                <div>
-                    <strong>Member since:</strong>
-                    <p>{{member.created | date:"dd MMM yyyy"}}</p>
-                </div>
-            </div>
-            <div class="card-footer">
-                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success btn-block">Save Changes</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <tabset class="member-tabset">
-            <tab heading="About {{member.knownAs}}">
-                <form  #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
-                    <h4>Description</h4>
-                    <textarea class ='form-control' [(ngModel)]="member.introduction" name="introduction" rows="6"></textarea>
-                    <h4 class="mt-2">Looking for</h4>
-                    <textarea class ='form-control' [(ngModel)]="member.lookingFor" name="lookingFor" rows="6"></textarea>
-                    <h4 class="mt-2">Interests</h4>
-                    <textarea class ='form-control' [(ngModel)]="member.interests" name="interests" rows="6"></textarea>
-                    <h4 class="mt-2">Location Details</h4>
-                    <div class="form-inline">
-                        <label for="city">City: </label>
-                        <input class ='form-control' [(ngModel)]="member.city" type="text" name="city" class="form-control mx-2">
-                        <label for="city">Country: </label>
-                        <input class ='form-control' [(ngModel)]="member.country" type="text" name="country" class="form-control mx-2">
-                    </div>
-                </form>
-               
-                
-            </tab>
-
-            <tab heading="Edit Photos">
-                <app-photo-editor [member]="member"></app-photo-editor>
-            </tab>
-        </tabset>
-    </div>
+<div *ngIf="member" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 32px;">
+    <mat-card class="mat-elevation-z4" style="max-width: 350px; min-width: 300px;">
+        <mat-card-header>
+            <mat-card-title>Your Profile</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image [src]="member.photoUrl || '/assets/user.png'" alt="{{member.knownAs}}" style="border-radius: 8px; margin-bottom: 16px;">
+        <mat-card-content>
+            <div style="margin-bottom: 8px;"><strong>Location:</strong> {{member.city}}, {{member.country}}</div>
+            <div style="margin-bottom: 8px;"><strong>Age:</strong> {{member.age}}</div>
+            <div style="margin-bottom: 8px;"><strong>Last Active:</strong> {{member.lastActive | date:'short'}}</div>
+            <div style="margin-bottom: 8px;"><strong>Member since:</strong> {{member.created | date:'dd MMM yyyy'}} </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="!editForm?.dirty" form="editForm" type="submit">Save Changes</button>
+        </mat-card-actions>
+        <mat-card-footer *ngIf="editForm?.dirty" style="margin-top: 8px;">
+            <mat-icon color="accent">info</mat-icon>
+            <span style="margin-left: 8px; color: #ff9800;">You have made changes, any unsaved changes will be lost</span>
+        </mat-card-footer>
+    </mat-card>
+    <mat-card class="mat-elevation-z2" style="flex: 1 1 400px; min-width: 350px;">
+        <!-- Add Angular Material Tabs for editing profile/photos here -->
+    </mat-card>
 </div>

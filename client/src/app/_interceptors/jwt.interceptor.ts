@@ -20,7 +20,10 @@ export class JwtInterceptor implements HttpInterceptor {
     //let currentUser: User;
   
     //this.accountService.currentUser$.pipe().subscribe(user => currentUser == user);
-    var currentUser= this.accountService.getCurrentUser();
+    var currentUser = null;
+    if (typeof window !== 'undefined') {
+      currentUser = this.accountService.getCurrentUser();
+    }
     if(currentUser!=null)
     {
       request = request.clone({

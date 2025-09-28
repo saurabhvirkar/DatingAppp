@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, TitleCasePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { Message } from '../_models/message';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { Pagination } from '../_models/pagination';
 import { ConfirmService } from '../_services/confirm.service';
 import { MessageService } from '../_services/message.service';
@@ -7,7 +15,9 @@ import { MessageService } from '../_services/message.service';
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.css']
+  styleUrls: ['./messages.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, TitleCasePipe, RouterModule, MatPaginatorModule, MatCardModule, MatButtonModule, MatIconModule, MatTableModule]
 })
 export class MessagesComponent implements OnInit {
   messages: Message[]|any =[];

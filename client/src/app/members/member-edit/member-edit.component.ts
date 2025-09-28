@@ -1,17 +1,24 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PhotoEditorComponent } from '../photo-editor/photo-editor.component';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-member-edit',
   templateUrl: './member-edit.component.html',
-  styleUrls: ['./member-edit.component.css']
+  styleUrls: ['./member-edit.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, PhotoEditorComponent, MatCardModule, MatButtonModule, MatIconModule]
 })
 export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm!: NgForm;
@@ -26,8 +33,12 @@ export class MemberEditComponent implements OnInit {
 
 
   constructor(private accountService: AccountService,private memberServce:MembersService,
-    private toastr: ToastrService) { 
-      this.accountService.currentUser$.pipe<User>(take(1)).subscribe(user=> this.user=user);
+  ) { 
+      this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+        if (user) {
+          this.user = user;
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -42,7 +53,7 @@ export class MemberEditComponent implements OnInit {
 
   updateMember(){
     console.log(this.member);
-    this.toastr.success('Profile updated successfully');
+  // TODO: Show success with Angular Material Snackbar
     this.editForm.reset(this.member);
   }
 }
