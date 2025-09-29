@@ -1,12 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { tick } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-test-errors',
   templateUrl: './test-errors.component.html',
-  styleUrls: ['./test-errors.component.css']
+  styleUrls: ['./test-errors.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class TestErrorsComponent implements OnInit {
   baseUrl=environment.apiUrl;

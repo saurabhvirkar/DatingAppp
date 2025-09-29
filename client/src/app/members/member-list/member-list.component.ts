@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MemberCardComponent } from '../member-card/member-card.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
@@ -11,7 +20,9 @@ import { MembersService } from 'src/app/_services/members.service';
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
-  styleUrls: ['./member-list.component.css']
+  styleUrls: ['./member-list.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, MemberCardComponent, MatPaginatorModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule]
 })
 export class MemberListComponent implements OnInit {
   members : Member[] | null=[];
@@ -26,9 +37,11 @@ export class MemberListComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.accountService.currentUser$.pipe(take(1)).subscribe(user =>{
-      this.userParams = new UserParams(user);
-    })
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+      if (user) {
+        this.userParams = new UserParams(user);
+      }
+    });
     this.loadMember();
   }
 

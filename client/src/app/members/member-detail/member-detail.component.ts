@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOptions,NgxGalleryModule } from '@kolkov/ngx-gallery';
-import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { GalleryComponent } from '../../gallery/gallery.component';
+import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { MemberMessagesComponent } from '../member-messages/member-messages.component';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
@@ -10,21 +13,22 @@ import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
+// Removed TabsetComponent and TabDirective imports
 
 
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
-  styleUrls: ['./member-detail.component.css']
+  styleUrls: ['./member-detail.component.css'],
+  standalone: true,
+  imports: [CommonModule, GalleryComponent, MemberMessagesComponent, DatePipe, MatTabsModule]
 })
 export class MemberDetailComponent implements OnInit , OnDestroy {
-  @ViewChild('memberTabs', {static:true}) memberTabs!: TabsetComponent;
   member!: Member;
-  galleryOptions: NgxGalleryOptions[]=[];
-  galleryImages: NgxGalleryImage[]=[];
-  activeTab!: TabDirective;
-  messages: Message[]=[];
+  images: string[] = [];
+  messages: Message[] = [];
   user!: User;
+  // Removed memberTabs and activeTab properties
 
 
 
@@ -32,49 +36,31 @@ export class MemberDetailComponent implements OnInit , OnDestroy {
        private messageService: MessageService, private accountService: AccountService,
        private router : Router) 
       {
-          this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user= user);
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+          if (user) {
+            this.user = user;
+          }
+        });
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
       }
   
 
   ngOnInit(): void {
     this.route.data.subscribe(data =>{
-      this.member = data.member;
+  this.member = data['member'];
     });
 
-    this.route.queryParams.subscribe(params =>
-      {
-        params.tab? this.selectTab(params.tab) :this.selectTab(0);
-      })
+  // TODO: Use Angular Material Tabs for tab selection
 
-    this.galleryOptions=[
-      {
-        width: '500px',
-        height:'500px',
-        imagePercent:100,
-        thumbnailsColumns:4,
-        imageAnimation:NgxGalleryAnimation.Slide,
-        preview:false
-      }
-    ]
-
-    this.galleryImages=this.getImages();
-  }
-
-  getImages():NgxGalleryImage[]{
-    const imageUrls=[];
-    for (const photo of this.member.photos)
-    {
-      imageUrls.push(
-        {
-          small:photo?.url,
-          medium:photo?.url,
-          big:photo?.url
-        }
-      )
+    // Convert member photos to image URLs for gallery
+    if (this.member && this.member.photos) {
+      this.images = this.member.photos.filter(p => p.isApproved).map(p => p.url);
     }
-    return imageUrls;
+
+  // Removed galleryImages and getImages()
   }
+
+  // Removed getImages()
 
   // loadMember(){
   //   this.memberService.getMember(this.route.snapshot.paramMap.get('username') ||'{}').subscribe(member=>{
@@ -89,19 +75,7 @@ export class MemberDetailComponent implements OnInit , OnDestroy {
     })
   }
 
-  selectTab(tabId:number){
-    this.memberTabs.tabs[tabId].active = true;
-  }
-
-  onTabActivated(data: TabDirective){
-    this.activeTab=data;
-    if(this.activeTab.heading === 'Messages' && this.messages.length === 0){
-      this.messageService.createHubConnection(this.user,this.member.username);
-    }
-    else{
-      this.messageService.stopHubConnection();
-    }
-  }
+  // TODO: Use Angular Material Tabs logic for tab selection and activation
   
   ngOnDestroy(): void {
     this.messageService.stopHubConnection();

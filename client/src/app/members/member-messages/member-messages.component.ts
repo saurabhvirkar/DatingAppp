@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { Message } from 'src/app/_models/message';
 import { MessageService } from 'src/app/_services/message.service';
@@ -7,12 +9,15 @@ import { MessageService } from 'src/app/_services/message.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-member-messages',
   templateUrl: './member-messages.component.html',
-  styleUrls: ['./member-messages.component.css']
+  styleUrls: ['./member-messages.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class MemberMessagesComponent implements OnInit {
   @ViewChild('messageForm') messageForm!: NgForm;
   @Input() messages: Message[] | any = [];
   @Input() username!: string;
+  @Input() member!: any;
   messageContent!: string;
 
   constructor(public messageService: MessageService) { }

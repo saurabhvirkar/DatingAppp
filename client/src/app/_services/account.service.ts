@@ -14,7 +14,7 @@ export class AccountService {
   // throw new Error('Method not implemented.');
   // }
   baseUrl = environment.apiUrl;
-  private currentUserSource = new ReplaySubject<User>(1);
+  private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private http: HttpClient, private presence: PresenceService) { }
@@ -50,25 +50,31 @@ export class AccountService {
     if (user.token) {
       const roles = this.getDecodedToken(user.token).role;
       Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
-      localStorage.setItem('user', JSON.stringify(user));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user));
+      }
       this.currentUserSource.next(user);
       this.presence.createHubConnection(user);
     }
   }
 
   logout() {
-    localStorage.removeItem('user');
-    this.currentUserSource.next(undefined);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user');
+    }
+    this.currentUserSource.next(null);
     this.presence.stopHubConnection();
   }
 
   getCurrentUser() {
-    if (localStorage.getItem('user') != null && localStorage.getItem('user') != undefined) {
-      return JSON.parse(localStorage.getItem('user') || '{}');
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('user') != null && localStorage.getItem('user') != undefined) {
+        return JSON.parse(localStorage.getItem('user') || '{}');
+      } else {
+        return null;
+      }
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
   getDecodedToken(token: string) {

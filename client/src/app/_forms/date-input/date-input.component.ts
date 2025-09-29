@@ -1,32 +1,40 @@
 import { Component, Input, OnInit, Self } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { BsDatepickerAbstractComponent } from 'ngx-bootstrap/datepicker/base/bs-datepicker-container';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-date-input',
   templateUrl: './date-input.component.html',
-  styleUrls: ['./date-input.component.css']
+  styleUrls: ['./date-input.component.css'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule]
 })
 export class DateInputComponent implements ControlValueAccessor {
   @Input() label!:string;
   @Input() maxDate!: Date;
-  bsConfig!: Partial<BsDatepickerConfig>;
+  // Use Angular Material Datepicker config
 
   constructor(@Self() public ngControl: NgControl) {
-    this.ngControl.valueAccessor=this;
-    this.bsConfig={
-      containerClass: 'theme-red',
-      dateInputFormat:'DD MMMM YYYY'
+    this.ngControl.valueAccessor = this;
+  }
+
+  private onChange: any = () => {};
+  private onTouched: any = () => {};
+
+  writeValue(obj: any): void {
+    if (this.ngControl && this.ngControl.control) {
+      this.ngControl.control.setValue(obj);
     }
-   }
-  writeValue(obj: any): void {   
   }
-
-  registerOnChange(fn: any): void { 
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
-
   registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
 

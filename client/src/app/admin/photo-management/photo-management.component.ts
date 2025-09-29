@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Photo } from 'src/app/_models/photo';
 import { AdminService } from 'src/app/_services/admin.service';
 
 @Component({
   selector: 'app-photo-management',
   templateUrl: './photo-management.component.html',
-  styleUrls: ['./photo-management.component.css']
+  styleUrls: ['./photo-management.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class PhotoManagementComponent implements OnInit {
 

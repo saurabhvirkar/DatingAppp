@@ -1,57 +1,37 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
-  <div class="container">
-    <div class="container-fluid">
-      <a class="navbar-brand" routerLink='/' routerLinkActive='active'>Dating App</a>
 
-      <ul class="navbar-nav mr-auto">
-        <ng-container *ngIf="accountService.currentUser$|async">
-        <li class="nav-item">
-          <a class="nav-link" routerLink='/members' routerLinkActive='active'>Matches</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink='/lists' routerLinkActive='active'>Lists</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink='/messages' routerLinkActive='active'>Messages</a>
-        </li>
-        <li *appHasRole='["Admin", "Moderator"]' class="nav-item">
-          <a  class="nav-link" routerLink='/admin' routerLinkActive='active'>Admin</a>
-        </li>
-      </ng-container>
-      
-      <li class="nav-item">
-        <a class="nav-link" routerLink='/errors' routerLinkActive='active'>Errors</a>
-      </li>
-      </ul>
-
-      <div class="dropdown" *ngIf="(accountService.currentUser$|async) as user" dropdown>
-        <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.username}}">
-        <a class="dropdown-toggle text-light ml-2"dropdownToggle>Welcome {{user.knownAs || user.username | titlecase}}</a>
-        <div class="dropdown-menu mt-3" *dropdownMenu>
-          <a routerLink="/member/edit" class= "dropdown-item">Edit Profile</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="logout()">Logout</a>
-        </div> 
-      </div>
-
-      <form *ngIf="(accountService.currentUser$ | async)==null" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
-        <input 
-          name="username"
-          [(ngModel)]="model.username"
-          class="form-control me-2"  
-          type="text" 
-          placeholder="Username">
-
-        <input 
-          name="password"
-          ng [(ngModel)]="model.password"
-          class="form-control me-2" 
-          type="password" 
-          placeholder="Password">
-
-        <button class="btn btn-success" type="submit">Login</button>
-      </form>
-    </div>
-  </div>    
-    
-</nav>
+<mat-toolbar color="primary" class="mat-elevation-z4" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+  <span style="font-size: 1.5rem; font-weight: 500; margin-right: 32px;">
+    <a routerLink="/" style="color: white; text-decoration: none;">Dating App</a>
+  </span>
+  <span style="flex: 1 1 auto;"></span>
+  <ng-container *ngIf="accountService.currentUser$|async as user; else loginForm">
+    <button mat-button routerLink="/members">Matches</button>
+    <button mat-button routerLink="/lists">Lists</button>
+    <button mat-button routerLink="/messages">Messages</button>
+    <button mat-button *appHasRole='["Admin", "Moderator"]' routerLink="/admin">Admin</button>
+    <button mat-button routerLink="/errors">Errors</button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/member/edit">Edit Profile</button>
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="userMenu" style="margin-left: 16px;">
+      <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.username}}" style="width: 32px; height: 32px; border-radius: 50%; vertical-align: middle; margin-right: 8px;">
+      Welcome {{user.knownAs || (user.username | titlecase)}}
+    </button>
+  </ng-container>
+  <ng-template #loginForm>
+    <form #loginForm="ngForm" style="display: flex; align-items: center; gap: 8px;" (ngSubmit)="login()" autocomplete="off">
+      <mat-form-field appearance="outline" style="width: 160px;">
+        <mat-label>Username</mat-label>
+        <input matInput name="username" [(ngModel)]="model.username" type="text" placeholder="Username" required>
+        <mat-error *ngIf="!model.username">Please enter a Username</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 160px;">
+        <mat-label>Password</mat-label>
+        <input matInput name="password" [(ngModel)]="model.password" type="password" placeholder="Password" required>
+        <mat-error *ngIf="!model.password">Please enter a Password</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="accent" type="submit" [disabled]="!model.username || !model.password">Login</button>
+    </form>
+  </ng-template>
+</mat-toolbar>
